@@ -46,3 +46,17 @@ def add_commands(bot_instance):
             await ctx.voice_cliente.disconnect()
         else:
             await ctx.reply('The bot is not in a voice channel.')
+
+    
+    @bot_instance.command()
+    async def play(ctx, url: str):
+        if not ctx.voice_client:
+            if ctx.author.voice:
+                channel = ctx.author.voice.channel
+                await channel.connect()
+            else:
+                await ctx.reply('You need to be in a voice channel first.')
+                return 
+        
+        YDL_OPTIONS = {'format': 'bestaudio/best', 'noplaylist': True}
+        FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
