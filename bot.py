@@ -25,12 +25,12 @@ def create_bot():
 
 def add_commands(bot_instance):
     # Defining the bot commands
-
     @bot_instance.command()
     async def greeting(ctx: commands.Context):
         user = ctx.author
         await ctx.reply(f'Hi, {user.display_name}!')
     
+
     @bot_instance.command()
     async def join(ctx):
         if ctx.author.voice:
@@ -38,4 +38,11 @@ def add_commands(bot_instance):
             await channel.connect()
         else:
             await ctx.reply('Enter in a voice channel.')
-            
+
+
+    @bot_instance.commands()
+    async def leave(ctx):
+        if ctx.voice_cliente:
+            await ctx.voice_cliente.disconnect()
+        else:
+            await ctx.reply('The bot is not in a voice channel.')
