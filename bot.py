@@ -60,3 +60,20 @@ def add_commands(bot_instance):
         
         YDL_OPTIONS = {'format': 'bestaudio/best', 'noplaylist': True}
         FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
+
+        with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
+            info = ydl.extract_info(url, download=False)
+            URL = info['formats'][0]['url']
+
+        voice_client = ctx.voice_client
+        voice_client.play(FFmpegPCMAudio(URL, **FFMPEG_OPTIONS), after=lambda e: print('done', e))
+
+    
+    @bot_instance.command()
+    async def pause(ctx):
+        voice_client = ctx.voice_client
+        if voice_client and voice_client.is_playing():
+            voice_client.pause()
+            await ctx.reply('Song paused.')
+        else:
+            await ctx.reply('Nothing is playing.')
