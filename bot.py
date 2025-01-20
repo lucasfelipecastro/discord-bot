@@ -76,7 +76,7 @@ def add_commands(bot_instance):
             voice_client.pause()
             await ctx.reply('Song paused.')
         else:
-            await ctx.reply('Nothing is playling.')
+            await ctx.reply('Nothing is playing.')
 
 
     @bot_instance.command()
@@ -87,3 +87,12 @@ def add_commands(bot_instance):
             await ctx.reply('Song resumed.')
         else:
             await ctx.reply('Nothing is resumed.')
+        
+    @bot_instance.command()
+    async def stop(ctx):
+        voice_client = ctx.voice_client
+        if voice_client and voice_client.is_playling():
+            voice_client.stop()
+            await ctx.reply('Song stopped.')
+        else:
+            await ctx.reply('Nothing is playing.')
