@@ -1,23 +1,41 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from dotenv import load_dotenv
 import os
+import yt_dlp as youtube_dl
+from discord import FFmpegPCMAudio
+from discord.ext.commands import Bot
+import asyncio
 
+# Loading environment variables
 load_dotenv()
 
-TOKEN = os.getenv("DISCORD_TOKEN")
-permissions = discord.Intents.default()
-permissions.message_content = True
-permissions.members = True
-bot = commands.Bot(command_prefix='.', intents=permissions)
+def get_bot_token():
+    # Getting the Bot Token
+    return os.getenv("DISCORD_TOKEN")
 
-@bot.command()
-async def hi(ctx:commands.Context):
-    user = ctx.author
-    await ctx.reply(f"Hi, {user.display_name}")
+def create_bot():
+    # Creating the bot
+    intents = discord.Intents.default()
+    intents.message_content = True
+    intents.members = True
 
-@bot.event
-async def on_ready():
-    print('Ready.')
+    bot_instance = commands.Bot(command_prefix='.', intents=intents)
+    return bot_instance
 
-bot.run(TOKEN)
+def add_commands(bot_instance):
+    # Defining the bot commands
+
+    @bot_instance.command()
+    async def greeting(ctx: commands.Context):
+        user = ctx.author
+        await ctx.reply(f'Hi, {user.display_name}!')
+    
+    @bot_instance.command()
+    async def join(ctx):
+        if ctx.author.voice:
+            channel = ctx.author.voice.channel
+            await channel.connect()
+        else:
+            await ctx.reply('Enter in a voice channel.')
+            
