@@ -96,3 +96,10 @@ def add_commands(bot_instance):
             await ctx.reply('Song stopped.')
         else:
             await ctx.reply('Nothing is playing.')
+
+
+def setup_events(bot_instance):
+
+    @bot_instance.event
+    async def on_ready():
+        print(f'The bot "{bot_instance.user}" is ready.')
