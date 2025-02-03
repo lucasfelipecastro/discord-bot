@@ -84,7 +84,12 @@ def add_commands(bot_instance):
                 URL = info['formats'][0]['url']
         except Exception as e:
             await ctx.reply(f"Error: {e}")
-        return
+    
+
+        if ctx.voice_client and ctx.voice_client.channel != ctx.author.voice.channel:
+            await ctx.reply("The bot is already in another voice channel.")
+            return
+
     
     @bot_instance.command()
     async def pause(ctx):
